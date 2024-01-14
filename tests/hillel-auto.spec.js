@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe.only('Hillel auto', () => {
+test.describe('Hillel auto', () => {
 
   test('Should register', async ({page}) => {
     const emailInput = page.locator('#signupEmail')
@@ -17,6 +17,5 @@ test.describe.only('Hillel auto', () => {
     await passwordInput.fill('P@ssword1')
     await repeatPasswordInput.fill('P@ssword1')
     await page.locator('button', {hasText: "Register"}).click()
-    await page.pause()
   })
 })
