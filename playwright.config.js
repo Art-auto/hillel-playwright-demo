@@ -1,15 +1,14 @@
-const { defineConfig, devices } = require('@playwright/test');
+import {  defineConfig, devices } from '@playwright/test'
+import path from 'path'
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-require('dotenv').config();
+require('dotenv').config()
+
+export const STORAGE_STATE = path.join(__dirname, 'states/.auth/user.json')
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   // testMatch: '*.cy.js',
   /* Run tests in files in parallel */
@@ -19,7 +18,7 @@ module.exports = defineConfig({
   /* Retry on CI only */
   retries: 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 3 : 1,
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -30,22 +29,32 @@ module.exports = defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     httpCredentials: {
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-    }
+      username: process.env.HTTP_USERNAME,
+      password: process.env.HTTP_PASSWORD,
+    },
+    screenshot: 'only-on-failure'
   },
+  // globalSetup: path.join(__dirname, 'global-setup.js'),
 
   /* Configure projects for major browsers */
   projects: [
     // {
-    //   name: 'chromium',
-    //   use: { ...devices['Desktop Chrome'] },
+    //   name: 'setup',
+    //   testMatch: /global-setup\.js/,
     // },
-
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'chromium',
+      // dependencies: ['setup'],
+      use: { 
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE, 
+      },
     },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
     // {
     //   name: 'webkit',
