@@ -12,7 +12,7 @@ export default defineConfig({
   testDir: './tests',
   // testMatch: '*.cy.js',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -27,7 +27,7 @@ export default defineConfig({
     baseURL: 'https://qauto.forstudy.space',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     httpCredentials: {
       username: process.env.HTTP_USERNAME,
       password: process.env.HTTP_PASSWORD,
@@ -38,13 +38,13 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // {
-    //   name: 'setup',
-    //   testMatch: /global-setup\.js/,
-    // },
+    {
+      name: 'setup',
+      testMatch: /global-setup\.js/,
+    },
     {
       name: 'chromium',
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
       use: { 
         ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE, 
