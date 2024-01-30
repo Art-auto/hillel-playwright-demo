@@ -29,8 +29,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
     httpCredentials: {
-      username: process.env.HTTP_USERNAME,
-      password: process.env.HTTP_PASSWORD,
+      username: `${process.env.HTTP_USERNAME}`,
+      password: `${process.env.HTTP_PASSWORD}`,
     },
     screenshot: 'only-on-failure'
   },
